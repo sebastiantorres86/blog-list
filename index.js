@@ -22,7 +22,7 @@ blogSchema.set('toJSON', {
 const Blog = mongoose.model('Blog', blogSchema)
 
 const mongoUrl =
-  'mongodb+srv://fullstack:biK%402Z32@cluster0.iybpv.mongodb.net/blog-list-app?retryWrites=true&w=majority'
+  'mongodb+srv://fullstack:<password>@cluster0.iybpv.mongodb.net/blog-list-app?retryWrites=true&w=majority'
 mongoose.connect(mongoUrl)
 
 app.use(cors())
