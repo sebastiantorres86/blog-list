@@ -2,10 +2,10 @@ POST http://localhost:3003/api/blogs
 Content-Type: application/json
 
 {
-    "title": "BetterProgramming",
-    "author": "Marcus Miller",
-    "url": "https://betterprogramming.pub/",
-    "likes": 772
+    "title": "FreeCodeCamp",
+    "author": "Nahla Daviesr",
+    "url": "https://www.freecodecamp.org/news/how-to-solve-multiple-inheritance-in-java/",
+    "likes": 73
 }
 
 ###
