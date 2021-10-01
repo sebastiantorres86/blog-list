@@ -1,0 +1,20 @@
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+
+{
+    "title": "BetterProgramming",
+    "author": "Marcus Miller",
+    "url": "https://betterprogramming.pub/",
+    "likes": 772
+}
+
+###
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+
+{
+    "title": "David Walsh BlogX",
+    "author": "David Walsh",
+    "url": "https://davidwalsh.name/",
+    "likes": 4
+}
