@@ -24,8 +24,25 @@ const favoriteBlog = blogs => {
   }
 }
 
+const mostBlogs = blogs => {
+  if (blogs.length !== 0) {
+    const authorsWithBlogAmount = blogs.reduce((acc, currentBlog) => {
+      if (!acc.map(blog => blog.author).includes(currentBlog.author)) {
+        acc.push({ author: currentBlog.author, blogs: 1 })
+        return acc
+      }
+      acc.find(blog => blog.author === currentBlog.author).blogs += 1
+      return acc
+    }, [])
+    return authorsWithBlogAmount.sort((a, b) => b.blogs - a.blogs)[0]
+  } else {
+    return {}
+  }
+}
+
 module.exports = {
   dummy,
   totalLikes,
-  favoriteBlog
+  favoriteBlog,
+  mostBlogs
 }
