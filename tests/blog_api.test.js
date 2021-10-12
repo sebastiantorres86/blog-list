@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const supertest = require('supertest')
+const { response } = require('../app')
 const app = require('../app')
 const Blog = require('../models/blog')
 const initialBlogs = [
@@ -71,6 +72,13 @@ test('blogs are returned as json', async () => {
     .expect(200)
     .expect('Content-Type', /application\/json/)
 }, 100000)
+
+test('the unique identifier property of the blog posts is named id', async () => {
+  const response = await api.get('/api/blogs')
+  response.body.forEach(blog => {
+    expect(blog.id).toBeDefined()
+  })
+})
 
 afterAll(() => {
   mongoose.connection.close()
