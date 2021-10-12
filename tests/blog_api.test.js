@@ -44,7 +44,7 @@ const initialBlogs = [
     author: 'Robert C. Martin',
     url:
       'http://blog.cleancoder.com/uncle-bob/2017/03/03/TDD-Harms-Architecture.html',
-    likes: 0,
+    likes: 1,
     __v: 0
   },
   {
@@ -104,6 +104,26 @@ test('a valid blog can be added', async () => {
 
   expect(response.body).toHaveLength(initialBlogs.length + 1)
   expect(contents).toContain('Writing a Sokoban Puzzle Game in JavaScript')
+})
+
+test(' if the likes property is missing from the request, it will default to the value 0', async () => {
+  const newBlog = {
+    title: 'Writing a Sokoban Puzzle Game in JavaScript',
+    author: 'Tania Rascia',
+    url: 'https://www.taniarascia.com/sokoban-game/'
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(200)
+    .expect('Content-Type', /application\/json/)
+
+  const response = await api.get('/api/blogs')
+
+  const contents = response.body.map(r => r.likes)
+
+  expect(contents).toContain(0)
 })
 
 afterAll(() => {
