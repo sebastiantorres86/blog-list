@@ -58,10 +58,14 @@ const initialBlogs = [
 ]
 beforeEach(async () => {
   await Blog.deleteMany({})
-  let blogObject = new Blog(initialBlogs[0])
-  await blogObject.save()
-  blogObject = new Blog(initialBlogs[1])
-  await blogObject.save()
+  console.log('cleared')
+
+  initialBlogs.forEach(async blog => {
+    let blogObject = new Blog(blog)
+    await blogObject.save()
+    console.log('saved')
+  })
+  console.log('done')
 })
 
 const api = supertest(app)
@@ -78,6 +82,28 @@ test('the unique identifier property of the blog posts is named id', async () =>
   response.body.forEach(blog => {
     expect(blog.id).toBeDefined()
   })
+})
+
+test('a valid blog can be added', async () => {
+  const newBlog = {
+    title: 'Writing a Sokoban Puzzle Game in JavaScript',
+    author: 'Tania Rascia',
+    url: 'https://www.taniarascia.com/sokoban-game/',
+    likes: 0
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(200)
+    .expect('Content-Type', /application\/json/)
+
+  const response = await api.get('/api/blogs')
+
+  const contents = response.body.map(r => r.title)
+
+  expect(response.body).toHaveLength(initialBlogs.length + 1)
+  expect(contents).toContain('Writing a Sokoban Puzzle Game in JavaScript')
 })
 
 afterAll(() => {
