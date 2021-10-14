@@ -87,7 +87,7 @@ describe('deleting a blogpost', () => {
   test('succeeds with status code 204 if id is valid', async () => {
     const blogsAtStart = await helper.blogsInDb()
 
-    console.log('blogid: ', blogToDelete.id)
+    const blogToDelete = blogsAtStart[0]
 
     await api.delete(`/api/blogs/${blogToDelete.id}`).expect(204)
 
@@ -98,6 +98,37 @@ describe('deleting a blogpost', () => {
     const contents = blogsAtEnd.map(r => r.title)
 
     expect(contents).not.toContain(blogToDelete.title)
+  })
+})
+
+describe('updating a blogpost', () => {
+  test('succeeds with status code 200 if id is valid', async () => {
+    const blogsAtStart = await helper.blogsInDb()
+
+    const blogToUpdate = blogsAtStart[0]
+
+    const updatedBlog = {
+      title: 'First class tests',
+      author: 'Robert C. Martin',
+      url:
+        'http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.htmll',
+      likes: 42
+    }
+
+    await api
+      .put(`/api/blogs/${blogToUpdate.id}`)
+      .send(updatedBlog)
+      .expect(200)
+
+    const blogsAtEnd = await helper.blogsInDb()
+
+    console.log(blogsAtEnd)
+
+    expect(blogsAtEnd.length).toBe(helper.initialBlogs.length)
+
+    const contents = blogsAtEnd.map(r => r.likes)
+
+    expect(contents[0]).toEqual(42)
   })
 })
 
