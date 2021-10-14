@@ -83,6 +83,24 @@ test('blog without content is not added', async () => {
   expect(notesAtEnd).toHaveLength(helper.initialBlogs.length)
 })
 
+describe('deleting a blogpost', () => {
+  test('succeeds with status code 204 if id is valid', async () => {
+    const blogsAtStart = await helper.blogsInDb()
+
+    console.log('blogid: ', blogToDelete.id)
+
+    await api.delete(`/api/blogs/${blogToDelete.id}`).expect(204)
+
+    const blogsAtEnd = await helper.blogsInDb()
+
+    expect(blogsAtEnd.length).toBe(helper.initialBlogs.length - 1)
+
+    const contents = blogsAtEnd.map(r => r.title)
+
+    expect(contents).not.toContain(blogToDelete.title)
+  })
+})
+
 afterAll(() => {
   mongoose.connection.close()
 })
